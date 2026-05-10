@@ -5,6 +5,7 @@ import { CommonStoreContext } from "@/stores/common";
 import Head from "next/head";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
+import { BOTTOM_NAV_CONTENT_PADDING } from "@/components/nav/bottom-nav";
 
 const tailwindConfig = require("../../tailwind.config");
 
@@ -65,6 +66,7 @@ export default function IndexLayout({ children }: { children: ReactNode }) {
           animate={start ? "open" : "closed"}
           className={cx(
             "h-full select-none",
+            BOTTOM_NAV_CONTENT_PADDING,
             "grid grid-rows-[minmax(auto,_1fr)_minmax(auto,_460px)]",
             "md:grid-rows-[minmax(auto,_1fr)_minmax(auto,_600px)]"
           )}

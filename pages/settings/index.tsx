@@ -8,6 +8,8 @@ import useLocations from "@/hooks/use-locations";
 import { useTheme } from "next-themes";
 import Box from "@/components/box";
 import SettingsLayout from "@/components/settings/layout";
+import { BOTTOM_NAV_CONTENT_PADDING } from "@/components/nav/bottom-nav";
+import { cx } from "@/utils/helper";
 import { TimeFormat } from "@/types";
 import Trans from "next-translate/Trans";
 import { useRouter } from "next/router";
@@ -48,7 +50,7 @@ export default function Settings() {
 
   return (
     <SettingsLayout>
-      <Container className="grid py-8">
+      <Container className={cx("grid py-8", BOTTOM_NAV_CONTENT_PADDING)}>
         <div className="grid gap-4">
           {/**/}
 
@@ -242,7 +244,10 @@ export default function Settings() {
           </Box.BoxContainer>
         </div>
 
-        <div className="sticky bottom-0 z-20 mt-40 pb-10">
+        <div
+          className="sticky z-20 mt-40 pb-10
+          bottom-[calc(4.5rem+env(safe-area-inset-bottom))]"
+        >
           <span
             className="pointer-events-none
           absolute -z-10 inset-x-0 -top-20 bottom-0
