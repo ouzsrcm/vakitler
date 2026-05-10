@@ -9,6 +9,10 @@ import {
   IconLoader2,
 } from "@tabler/icons-react";
 import useTranslation from "next-translate/useTranslation";
+import {
+  clearLastPlayed,
+  writeLastPlayed,
+} from "@/components/quran/storage";
 
 interface Props {
   surah: ISurah;
@@ -17,6 +21,9 @@ interface Props {
   onNext: () => void;
   hasPrev: boolean;
   hasNext: boolean;
+  /** Seek once after load (e.g. resume). Cleared via `onInitialTimeApplied`. */
+  initialTime?: number;
+  onInitialTimeApplied?: () => void;
 }
 
 function formatTime(seconds: number): string {
@@ -33,17 +40,22 @@ export default function QuranPlayer({
   onNext,
   hasPrev,
   hasNext,
+  initialTime,
+  onInitialTimeApplied,
 }: Props) {
   const { lang } = useTranslation("common");
   const isTr = lang === "tr";
   const audioRef = useRef<HTMLAudioElement>(null);
+  const initialAppliedRef = useRef(false);
+  const onInitialTimeAppliedRef = useRef(onInitialTimeApplied);
+  onInitialTimeAppliedRef.current = onInitialTimeApplied;
 
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Reset and auto-play when surah/url changes
+  // Reset and auto-load when surah/url changes
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -51,8 +63,55 @@ export default function QuranPlayer({
     setLoading(true);
     setCurrentTime(0);
     setDuration(0);
+    initialAppliedRef.current = false;
     audio.load();
   }, [audioUrl]);
+
+  useEffect(() => {
+    if (initialTime == null || initialTime <= 0 || !Number.isFinite(initialTime)) {
+      return;
+    }
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let cancelled = false;
+    initialAppliedRef.current = false;
+
+    const applySeek = () => {
+      if (cancelled || initialAppliedRef.current) return;
+      audio.currentTime = initialTime;
+      initialAppliedRef.current = true;
+      setCurrentTime(initialTime);
+      onInitialTimeAppliedRef.current?.();
+    };
+
+    if (audio.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      applySeek();
+    }
+
+    if (!initialAppliedRef.current) {
+      const onReady = () => applySeek();
+      audio.addEventListener("canplay", onReady, { once: true });
+      return () => {
+        cancelled = true;
+        audio.removeEventListener("canplay", onReady);
+      };
+    }
+    return undefined;
+  }, [initialTime, audioUrl]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const audio = audioRef.current;
+      if (!audio || audio.paused || !Number.isFinite(audio.currentTime)) return;
+      writeLastPlayed({
+        surahNumber: surah.number,
+        currentTime: audio.currentTime,
+        savedAt: new Date().toISOString(),
+      });
+    }, 5000);
+    return () => clearInterval(id);
+  }, [surah.number, audioUrl]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -60,7 +119,7 @@ export default function QuranPlayer({
     if (playing) {
       audio.pause();
     } else {
-      audio.play();
+      void audio.play();
     }
   };
 
@@ -82,6 +141,7 @@ export default function QuranPlayer({
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onEnded={() => {
+          clearLastPlayed();
           setPlaying(false);
           if (hasNext) onNext();
         }}
