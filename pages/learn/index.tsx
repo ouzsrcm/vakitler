@@ -1,8 +1,6 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IconChevronLeft } from "@tabler/icons-react";
 import { IconFlame, IconStarFilled } from "@tabler/icons-react";
 import useTranslation from "next-translate/useTranslation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -193,15 +191,6 @@ export default function LearnIndexPage() {
               transition={{ duration: 0.2 }}
               className="pb-6 pt-1"
             >
-              <div className="mb-4">
-                <Link
-                  href="/quran"
-                  className="flex items-center gap-1 text-sm text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-200"
-                >
-                  <IconChevronLeft size={16} />
-                  {t("backToQuran")}
-                </Link>
-              </div>
               <CurriculumMap />
             </motion.div>
           ) : null}
@@ -214,15 +203,6 @@ export default function LearnIndexPage() {
               transition={{ duration: 0.2 }}
               className="pb-6 pt-1"
             >
-              <div className="mb-4">
-                <Link
-                  href="/quran"
-                  className="flex items-center gap-1 text-sm text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-200"
-                >
-                  <IconChevronLeft size={16} />
-                  {t("backToQuran")}
-                </Link>
-              </div>
               <WordBankView
                 words={wordBank.words}
                 loading={wordBank.loading}
