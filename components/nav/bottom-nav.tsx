@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {
   IconBook,
   IconHome2,
+  IconSchool,
   IconSettings,
   type TablerIconsProps,
 } from "@tabler/icons-react";
@@ -32,6 +33,12 @@ const tabs: Tab[] = [
     label: "Kuran",
     Icon: IconBook,
     match: p => p === "/quran" || p.startsWith("/quran/"),
+  },
+  {
+    href: "/learn",
+    label: "Öğren",
+    Icon: IconSchool,
+    match: p => p === "/learn" || p.startsWith("/learn/"),
   },
   {
     href: "/settings",

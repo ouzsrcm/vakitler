@@ -8,9 +8,8 @@ export default function ModeTabs({ activeMod }: { activeMod: QuranMod }) {
   const { t } = useTranslation("quran");
 
   const setMod = (m: QuranMod) => {
-    const pathname = router.pathname || "/quran";
     void router.push(
-      { pathname, query: { ...router.query, mod: m } },
+      { pathname: "/quran", query: { ...router.query, mod: m } },
       undefined,
       { shallow: true }
     );

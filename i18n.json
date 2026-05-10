@@ -5,6 +5,8 @@
     "*": ["common", "settings"],
     "/settings/adjust": ["adjustments"],
     "/quran": ["quran"],
-    "/quran/[surahId]": ["quran"]
+    "/quran/[surahId]": ["quran"],
+    "/learn": ["quran"],
+    "/learn/[surahId]": ["quran"]
   }
 }
