@@ -7,6 +7,7 @@ import { IconFlame, IconStarFilled } from "@tabler/icons-react";
 import useTranslation from "next-translate/useTranslation";
 import { AnimatePresence, motion } from "framer-motion";
 import LearnLayout from "@/components/learn/layout";
+import ElifbaTabPanel from "@/components/learn/elifba/elifba-tab-panel";
 import WordBankView from "@/components/learn/word-bank/word-bank-view";
 import CurriculumMap from "@/components/quran/learn/curriculum-map";
 import { getXP, getStreak } from "@/lib/learn/progress";
@@ -14,7 +15,7 @@ import { ensureWordBank } from "@/lib/learn/word-fetcher";
 import type { IWord } from "@/lib/learn/words";
 import { cx } from "@/utils/helper";
 
-type LearnTab = "lessons" | "words";
+type LearnTab = "lessons" | "words" | "elif";
 
 export default function LearnIndexPage() {
   const { t } = useTranslation("learn");
@@ -39,18 +40,27 @@ export default function LearnIndexPage() {
   useEffect(() => {
     const q = router.query.tab;
     if (q === "words") setTab("words");
+    else if (q === "elif") setTab("elif");
   }, [router.query.tab]);
 
   const setTabAndRoute = useCallback(
     (next: LearnTab) => {
       setTab(next);
-      void router.replace(
-        next === "words"
-          ? { pathname: "/learn", query: { tab: "words" } }
-          : { pathname: "/learn" },
-        undefined,
-        { shallow: true }
-      );
+      if (next === "lessons") {
+        void router.replace({ pathname: "/learn" }, undefined, { shallow: true });
+      } else if (next === "words") {
+        void router.replace(
+          { pathname: "/learn", query: { tab: "words" } },
+          undefined,
+          { shallow: true }
+        );
+      } else {
+        void router.replace(
+          { pathname: "/learn", query: { tab: "elif" } },
+          undefined,
+          { shallow: true }
+        );
+      }
     },
     [router]
   );
@@ -125,12 +135,12 @@ export default function LearnIndexPage() {
           </div>
         </section>
 
-        <div className="mb-4 flex justify-center gap-2">
+        <div className="mb-4 flex flex-wrap justify-center gap-2">
           <button
             type="button"
             onClick={() => setTabAndRoute("lessons")}
             className={cx(
-              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              "rounded-full px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
               tab === "lessons"
                 ? "bg-violet-500 text-white dark:bg-violet-600"
                 : "text-zinc-500 dark:text-zinc-400"
@@ -145,7 +155,7 @@ export default function LearnIndexPage() {
             type="button"
             onClick={() => setTabAndRoute("words")}
             className={cx(
-              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              "rounded-full px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
               tab === "words"
                 ? "bg-violet-500 text-white dark:bg-violet-600"
                 : "text-zinc-500 dark:text-zinc-400"
@@ -155,6 +165,21 @@ export default function LearnIndexPage() {
               🔤
             </span>
             {t("words.tabWords")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTabAndRoute("elif")}
+            className={cx(
+              "rounded-full px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm",
+              tab === "elif"
+                ? "bg-violet-500 text-white dark:bg-violet-600"
+                : "text-zinc-500 dark:text-zinc-400"
+            )}
+          >
+            <span className="font-arabic mr-1 text-base" dir="rtl" aria-hidden>
+              ا
+            </span>
+            {t("elifba.tabElifba")}
           </button>
         </div>
 
@@ -179,7 +204,8 @@ export default function LearnIndexPage() {
               </div>
               <CurriculumMap />
             </motion.div>
-          ) : (
+          ) : null}
+          {tab === "words" ? (
             <motion.div
               key="words"
               initial={{ opacity: 0 }}
@@ -207,7 +233,19 @@ export default function LearnIndexPage() {
                 }
               />
             </motion.div>
-          )}
+          ) : null}
+          {tab === "elif" ? (
+            <motion.div
+              key="elif"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pb-6 pt-1"
+            >
+              <ElifbaTabPanel />
+            </motion.div>
+          ) : null}
         </AnimatePresence>
       </div>
     </LearnLayout>

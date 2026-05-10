@@ -8,6 +8,9 @@
     "/quran/[surahId]": ["quran"],
     "/learn": ["learn", "quran"],
     "/learn/[surahId]": ["learn", "quran"],
-    "/learn/words/practice": ["learn"]
+    "/learn/words/practice": ["learn"],
+    "/learn/elifba": ["learn"],
+    "/learn/elifba/practice": ["learn"],
+    "/learn/elifba/[letter]": ["learn"]
   }
 }
