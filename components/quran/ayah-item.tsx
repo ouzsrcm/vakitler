@@ -1,7 +1,5 @@
-import { memo, useCallback } from "react";
-import TafsirAccordion from "@/components/quran/tafsir-accordion";
+import { memo } from "react";
 import { cx } from "@/utils/helper";
-import useTranslation from "next-translate/useTranslation";
 
 export type AyahRow = {
   numberInSurah: number;
@@ -19,12 +17,6 @@ interface Props {
   row: AyahRow;
   arabicFontPx: number;
   showMeal: boolean;
-  showTafsirControls: boolean;
-  tafsirOpen: boolean;
-  tafsirHidden: boolean;
-  onToggleTafsirForAyah: (ayahNo: number) => void;
-  onTafsirUnavailableForAyah: (ayahNo: number) => void;
-  onCloseTafsir: () => void;
 }
 
 function AyahItemInner({
@@ -32,23 +24,8 @@ function AyahItemInner({
   row,
   arabicFontPx,
   showMeal,
-  showTafsirControls,
-  tafsirOpen,
-  tafsirHidden,
-  onToggleTafsirForAyah,
-  onTafsirUnavailableForAyah,
-  onCloseTafsir,
 }: Props) {
-  const { t } = useTranslation("quran");
   const ayahNo = row.numberInSurah;
-
-  const toggle = useCallback(() => {
-    onToggleTafsirForAyah(ayahNo);
-  }, [onToggleTafsirForAyah, ayahNo]);
-
-  const handleUnavailable = useCallback(() => {
-    onTafsirUnavailableForAyah(ayahNo);
-  }, [onTafsirUnavailableForAyah, ayahNo]);
 
   return (
     <article
@@ -82,27 +59,6 @@ function AyahItemInner({
         <p className="mb-2 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
           {row.translation}
         </p>
-      )}
-
-      {showTafsirControls && !tafsirHidden && (
-        <>
-          <button
-            type="button"
-            onClick={toggle}
-            className="text-xs font-medium text-emerald-700 transition-colors hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
-            aria-expanded={tafsirOpen}
-          >
-            {tafsirOpen ? t("tafsirHide") : t("tafsirShow")}
-          </button>
-
-          <TafsirAccordion
-            open={tafsirOpen}
-            surahNumber={surahNumber}
-            ayahNumber={ayahNo}
-            onUnavailable={handleUnavailable}
-            onClose={onCloseTafsir}
-          />
-        </>
       )}
     </article>
   );

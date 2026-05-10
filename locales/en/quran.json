@@ -32,16 +32,8 @@
   "surahReadFontSize": "Arabic size",
   "surahReadMealOff": "Hide translation",
   "surahReadMealOn": "Show translation",
-  "surahReadTafsirOff": "Hide tafsir buttons",
-  "surahReadTafsirOn": "Show tafsir buttons",
   "surahReadRetry": "Try again",
   "surahReadNav": "Surah navigation",
   "surahReadLoading": "Loading…",
-  "surahReadRedirect": "Redirecting…",
-  "tafsirTitle": "Tafsir",
-  "tafsirMaududi": "(Maududi)",
-  "tafsirLoading": "Loading tafsir…",
-  "tafsirShow": "Tafsir ▼",
-  "tafsirHide": "Close ▲",
-  "tafsirClose": "Close ▲"
+  "surahReadRedirect": "Redirecting…"
 }

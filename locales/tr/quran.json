@@ -32,16 +32,8 @@
   "surahReadFontSize": "Arapça boyut",
   "surahReadMealOff": "Meali gizle",
   "surahReadMealOn": "Meali göster",
-  "surahReadTafsirOff": "Tefsir düğmelerini gizle",
-  "surahReadTafsirOn": "Tefsir düğmelerini göster",
   "surahReadRetry": "Tekrar dene",
   "surahReadNav": "Sure gezintisi",
   "surahReadLoading": "Yükleniyor…",
-  "surahReadRedirect": "Yönlendiriliyor…",
-  "tafsirTitle": "Tefsir",
-  "tafsirMaududi": "(Maududi)",
-  "tafsirLoading": "Tefsir yükleniyor…",
-  "tafsirShow": "Tefsir ▼",
-  "tafsirHide": "Kapat ▲",
-  "tafsirClose": "Kapat ▲"
+  "surahReadRedirect": "Yönlendiriliyor…"
 }

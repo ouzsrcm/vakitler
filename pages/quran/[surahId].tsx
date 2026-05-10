@@ -1,11 +1,4 @@
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,11 +21,9 @@ import {
   readFontSizeKey,
   readScrollY,
   readShowMeal,
-  readShowTafsir,
   writeFontSizeKey,
   writeScrollY,
   writeShowMeal,
-  writeShowTafsir,
   type QuranFontSizeKey,
 } from "@/components/quran/quran-read-settings";
 
@@ -52,23 +43,11 @@ const AyahListBlock = memo(function AyahListBlock({
   rows,
   arabicFontPx,
   showMeal,
-  showTafsirControls,
-  openTafsirAyah,
-  hiddenTafsir,
-  onToggleTafsirForAyah,
-  onTafsirUnavailableForAyah,
-  onCloseTafsir,
 }: {
   surahNumber: number;
   rows: AyahRow[];
   arabicFontPx: number;
   showMeal: boolean;
-  showTafsirControls: boolean;
-  openTafsirAyah: number | null;
-  hiddenTafsir: Set<number>;
-  onToggleTafsirForAyah: (ayahNo: number) => void;
-  onTafsirUnavailableForAyah: (ayahNo: number) => void;
-  onCloseTafsir: () => void;
 }) {
   return (
     <div>
@@ -79,12 +58,6 @@ const AyahListBlock = memo(function AyahListBlock({
           row={row}
           arabicFontPx={arabicFontPx}
           showMeal={showMeal}
-          showTafsirControls={showTafsirControls}
-          tafsirOpen={openTafsirAyah === row.numberInSurah}
-          tafsirHidden={hiddenTafsir.has(row.numberInSurah)}
-          onToggleTafsirForAyah={onToggleTafsirForAyah}
-          onTafsirUnavailableForAyah={onTafsirUnavailableForAyah}
-          onCloseTafsir={onCloseTafsir}
         />
       ))}
     </div>
@@ -134,17 +107,13 @@ export default function SurahReadPage() {
   const [error, setError] = useState(false);
   const [fontKey, setFontKey] = useState<QuranFontSizeKey>("md");
   const [showMeal, setShowMeal] = useState(true);
-  const [showTafsir, setShowTafsir] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openTafsirAyah, setOpenTafsirAyah] = useState<number | null>(null);
-  const [hiddenTafsir, setHiddenTafsir] = useState(() => new Set<number>());
   const menuRef = useRef<HTMLDivElement>(null);
   const scrollRestored = useRef(false);
 
   useEffect(() => {
     setFontKey(readFontSizeKey());
     setShowMeal(readShowMeal());
-    setShowTafsir(readShowTafsir());
   }, []);
 
   useEffect(() => {
@@ -158,8 +127,6 @@ export default function SurahReadPage() {
     setLoading(true);
     setError(false);
     setAyahs([]);
-    setOpenTafsirAyah(null);
-    setHiddenTafsir(new Set());
     scrollRestored.current = false;
 
     try {
@@ -255,27 +222,6 @@ export default function SurahReadPage() {
       return n;
     });
   };
-
-  const toggleTafsirGlobal = () => {
-    setMenuOpen(false);
-    setShowTafsir(v => {
-      const n = !v;
-      writeShowTafsir(n);
-      if (!n) setOpenTafsirAyah(null);
-      return n;
-    });
-  };
-
-  const onToggleTafsirForAyah = useCallback((ayahNo: number) => {
-    setOpenTafsirAyah(prev => (prev === ayahNo ? null : ayahNo));
-  }, []);
-
-  const onTafsirUnavailableForAyah = useCallback((ayahNo: number) => {
-    setHiddenTafsir(prev => new Set(prev).add(ayahNo));
-    setOpenTafsirAyah(prev => (prev === ayahNo ? null : prev));
-  }, []);
-
-  const onCloseTafsir = useCallback(() => setOpenTafsirAyah(null), []);
 
   const listHref = `/quran?mod=oku&sayfa=${encodeURIComponent(listSayfa)}`;
 
@@ -401,16 +347,6 @@ export default function SurahReadPage() {
                 >
                   {showMeal ? t("surahReadMealOff") : t("surahReadMealOn")}
                 </button>
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    toggleTafsirGlobal();
-                  }}
-                  className="flex w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-800 hover:bg-emerald-50 dark:text-zinc-100 dark:hover:bg-zinc-700"
-                >
-                  {showTafsir ? t("surahReadTafsirOff") : t("surahReadTafsirOn")}
-                </button>
               </div>
             )}
           </div>
@@ -452,12 +388,6 @@ export default function SurahReadPage() {
               rows={ayahs}
               arabicFontPx={arabicFontPx}
               showMeal={showMeal}
-              showTafsirControls={showTafsir}
-              openTafsirAyah={openTafsirAyah}
-              hiddenTafsir={hiddenTafsir}
-              onToggleTafsirForAyah={onToggleTafsirForAyah}
-              onTafsirUnavailableForAyah={onTafsirUnavailableForAyah}
-              onCloseTafsir={onCloseTafsir}
             />
           )}
         </div>

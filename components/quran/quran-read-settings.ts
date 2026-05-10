@@ -13,7 +13,6 @@ export const QURAN_FONT_PX: Record<QuranFontSizeKey, number> = {
 
 export const LS_QURAN_FONT_SIZE = "VAKITLER_QURAN_FONT_SIZE";
 export const LS_QURAN_SHOW_MEAL = "VAKITLER_QURAN_SHOW_MEAL";
-export const LS_QURAN_SHOW_TAFSIR = "VAKITLER_QURAN_SHOW_TAFSIR";
 
 export function scrollStorageKey(surahNo: number): string {
   return `VAKITLER_QURAN_SCROLL_${surahNo}`;
@@ -73,25 +72,6 @@ export function readShowMeal(): boolean {
 export function writeShowMeal(show: boolean) {
   try {
     localStorage.setItem(LS_QURAN_SHOW_MEAL, show ? "1" : "0");
-  } catch {
-    /* ignore */
-  }
-}
-
-export function readShowTafsir(): boolean {
-  if (typeof window === "undefined") return true;
-  try {
-    const raw = localStorage.getItem(LS_QURAN_SHOW_TAFSIR);
-    if (raw === null) return true;
-    return raw === "1" || raw === "true";
-  } catch {
-    return true;
-  }
-}
-
-export function writeShowTafsir(show: boolean) {
-  try {
-    localStorage.setItem(LS_QURAN_SHOW_TAFSIR, show ? "1" : "0");
   } catch {
     /* ignore */
   }
