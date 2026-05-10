@@ -10,11 +10,14 @@ export default function ExerciseShell({
   currentIndex,
   total,
   feedback,
+  exitHref = "/learn",
   children,
 }: {
   currentIndex: number;
   total: number;
   feedback: "idle" | "correct" | "wrong";
+  /** Varsayılan: /learn (pratik için /learn?tab=words vb.) */
+  exitHref?: string;
   children: React.ReactNode;
 }) {
   const { t } = useTranslation("learn");
@@ -30,7 +33,7 @@ export default function ExerciseShell({
           })}
         </p>
         <Link
-          href="/learn"
+          href={exitHref}
           className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-violet-200 bg-white text-zinc-600 transition-colors hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
           aria-label={t("exitLesson")}
         >

@@ -1,23 +1,84 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { IconFlame, IconStarFilled } from "@tabler/icons-react";
 import useTranslation from "next-translate/useTranslation";
+import { AnimatePresence, motion } from "framer-motion";
 import LearnLayout from "@/components/learn/layout";
+import WordBankView from "@/components/learn/word-bank/word-bank-view";
 import CurriculumMap from "@/components/quran/learn/curriculum-map";
 import { getXP, getStreak } from "@/lib/learn/progress";
+import { ensureWordBank } from "@/lib/learn/word-fetcher";
+import type { IWord } from "@/lib/learn/words";
+import { cx } from "@/utils/helper";
+
+type LearnTab = "lessons" | "words";
 
 export default function LearnIndexPage() {
   const { t } = useTranslation("learn");
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [xp, setXp] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [tab, setTab] = useState<LearnTab>("lessons");
+  const [wordBank, setWordBank] = useState<{
+    words: IWord[];
+    loading: boolean;
+    error: boolean;
+  }>({ words: [], loading: false, error: false });
+  const wordsFirstVisitRef = useRef(false);
 
   useEffect(() => {
     setXp(getXP());
     setStreak(getStreak());
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const q = router.query.tab;
+    if (q === "words") setTab("words");
+  }, [router.query.tab]);
+
+  const setTabAndRoute = useCallback(
+    (next: LearnTab) => {
+      setTab(next);
+      void router.replace(
+        next === "words"
+          ? { pathname: "/learn", query: { tab: "words" } }
+          : { pathname: "/learn" },
+        undefined,
+        { shallow: true }
+      );
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    if (tab !== "words" || wordsFirstVisitRef.current) return;
+    wordsFirstVisitRef.current = true;
+    void (async () => {
+      setWordBank({ words: [], loading: true, error: false });
+      const r = await ensureWordBank();
+      setWordBank({
+        words: r.words,
+        loading: false,
+        error: r.error && r.words.length === 0,
+      });
+    })();
+  }, [tab]);
+
+  const retryWords = useCallback(() => {
+    void (async () => {
+      setWordBank(s => ({ ...s, loading: true }));
+      const r = await ensureWordBank({ force: true });
+      setWordBank({
+        words: r.words,
+        loading: false,
+        error: r.error && r.words.length === 0,
+      });
+    })();
   }, []);
 
   return (
@@ -26,7 +87,7 @@ export default function LearnIndexPage() {
         <title>{t("pageTitle")}</title>
       </Head>
       <div className="mx-auto w-full max-w-md px-5">
-        <section className="-mx-5 mb-6 min-h-[180px] rounded-b-3xl bg-gradient-to-b from-violet-500 to-violet-700 px-8 pb-6 pt-8 text-white dark:from-violet-900 dark:to-zinc-900">
+        <section className="-mx-5 mb-4 min-h-[180px] rounded-b-3xl bg-gradient-to-b from-violet-500 to-violet-700 px-8 pb-5 pt-8 text-white dark:from-violet-900 dark:to-zinc-900">
           <div className="flex flex-col items-center gap-3 text-center">
             <h1 className="text-xl font-bold tracking-tight">
               <span aria-hidden className="mr-1.5">
@@ -64,19 +125,90 @@ export default function LearnIndexPage() {
           </div>
         </section>
 
-        <div className="pb-6 pt-1">
-          <div className="mb-4">
-            <Link
-              href="/quran"
-              className="flex items-center gap-1 text-sm text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-200"
-            >
-              <IconChevronLeft size={16} />
-              {t("backToQuran")}
-            </Link>
-          </div>
-
-          <CurriculumMap />
+        <div className="mb-4 flex justify-center gap-2">
+          <button
+            type="button"
+            onClick={() => setTabAndRoute("lessons")}
+            className={cx(
+              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              tab === "lessons"
+                ? "bg-violet-500 text-white dark:bg-violet-600"
+                : "text-zinc-500 dark:text-zinc-400"
+            )}
+          >
+            <span aria-hidden className="mr-1">
+              📚
+            </span>
+            {t("words.tabLessons")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTabAndRoute("words")}
+            className={cx(
+              "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+              tab === "words"
+                ? "bg-violet-500 text-white dark:bg-violet-600"
+                : "text-zinc-500 dark:text-zinc-400"
+            )}
+          >
+            <span aria-hidden className="mr-1">
+              🔤
+            </span>
+            {t("words.tabWords")}
+          </button>
         </div>
+
+        <AnimatePresence mode="wait">
+          {tab === "lessons" ? (
+            <motion.div
+              key="lessons"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pb-6 pt-1"
+            >
+              <div className="mb-4">
+                <Link
+                  href="/quran"
+                  className="flex items-center gap-1 text-sm text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-200"
+                >
+                  <IconChevronLeft size={16} />
+                  {t("backToQuran")}
+                </Link>
+              </div>
+              <CurriculumMap />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="words"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pb-6 pt-1"
+            >
+              <div className="mb-4">
+                <Link
+                  href="/quran"
+                  className="flex items-center gap-1 text-sm text-violet-700 transition-colors hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-200"
+                >
+                  <IconChevronLeft size={16} />
+                  {t("backToQuran")}
+                </Link>
+              </div>
+              <WordBankView
+                words={wordBank.words}
+                loading={wordBank.loading}
+                error={wordBank.error}
+                onRetry={retryWords}
+                onWordsUpdated={next =>
+                  setWordBank(prev => ({ ...prev, words: next }))
+                }
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </LearnLayout>
   );

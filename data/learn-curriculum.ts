@@ -26,6 +26,11 @@ export const LEARN_CURRICULUM: ILesson[] = [
   { surahNumber: 101, level: 3, unlocksAfter: [105, 106, 107, 109] },
 ];
 
+/** Müfredattaki 12 sure numarası (ders sırası). */
+export const CURRICULUM_SURAHS: readonly number[] = LEARN_CURRICULUM.map(
+  l => l.surahNumber
+);
+
 export function lessonForSurah(surahNumber: number): ILesson | undefined {
   return LEARN_CURRICULUM.find(l => l.surahNumber === surahNumber);
 }

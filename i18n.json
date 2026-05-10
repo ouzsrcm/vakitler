@@ -7,6 +7,7 @@
     "/quran": ["quran"],
     "/quran/[surahId]": ["quran"],
     "/learn": ["learn", "quran"],
-    "/learn/[surahId]": ["learn", "quran"]
+    "/learn/[surahId]": ["learn", "quran"],
+    "/learn/words/practice": ["learn"]
   }
 }
