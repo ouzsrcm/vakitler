@@ -16,7 +16,7 @@ export default function SortExercise({
   revealCorrect: boolean;
   onCheck: (correct: boolean) => void;
 }) {
-  const { t } = useTranslation("quran");
+  const { t } = useTranslation("learn");
   const correct = (exercise.correctAnswer as string[]) ?? [];
   const pool = exercise.sortPool ?? [];
 
@@ -52,10 +52,10 @@ export default function SortExercise({
         {exercise.question}
       </p>
 
-      <div className="flex min-h-[52px] flex-wrap gap-2 rounded-xl border border-dashed border-emerald-200 bg-emerald-50/40 p-3 dark:border-emerald-800 dark:bg-emerald-950/20">
+      <div className="flex min-h-[52px] flex-wrap gap-2 rounded-xl border border-dashed border-violet-200 bg-violet-50/50 p-3 dark:border-zinc-600 dark:bg-zinc-800/60">
         {built.length === 0 ? (
           <span className="text-xs text-zinc-400 dark:text-zinc-500">
-            {t("learnSortTapHint")}
+            {t("sortTapHint")}
           </span>
         ) : (
           built.map((w, i) => (
@@ -65,7 +65,7 @@ export default function SortExercise({
               disabled={disabled}
               onClick={() => removeFromBuilt(i)}
               dir="rtl"
-              className="rounded-lg border border-emerald-300 bg-white px-2 py-1.5 text-sm dark:border-emerald-700 dark:bg-zinc-900"
+              className="rounded-lg border border-violet-300 bg-white px-2 py-1.5 text-sm dark:border-zinc-600 dark:bg-zinc-900"
             >
               {w}
             </button>
@@ -81,7 +81,7 @@ export default function SortExercise({
             disabled={disabled}
             onClick={() => pickFromBank(w, i)}
             dir="rtl"
-            className="rounded-xl border border-emerald-100 bg-white px-3 py-2 text-sm hover:border-emerald-400 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:border-emerald-500"
+            className="rounded-xl border border-violet-200 bg-white px-3 py-2 text-sm hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700"
           >
             {w}
           </button>
@@ -92,9 +92,9 @@ export default function SortExercise({
         type="button"
         disabled={disabled || bank.length > 0}
         onClick={handleCheck}
-        className="mt-auto rounded-xl bg-emerald-500 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600 disabled:opacity-40"
+        className="mt-auto rounded-xl bg-violet-500 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-violet-600 disabled:opacity-40"
       >
-        {t("learnSortCheck")}
+        {t("sortCheck")}
       </button>
 
       {wrongPhase && revealCorrect && (

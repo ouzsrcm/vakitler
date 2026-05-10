@@ -1,8 +1,15 @@
 import type { LessonAyah, LessonData, LessonWord } from "./types";
+import surahs from "@/data/surahs";
+
+interface AlquranAyahRow {
+  number: number;
+  numberInSurah: number;
+  text: string;
+}
 
 interface AlquranSurahPayload {
   numberOfAyahs: number;
-  ayahs: { numberInSurah: number; text: string }[];
+  ayahs: AlquranAyahRow[];
 }
 
 interface AlquranResponse {
@@ -39,15 +46,47 @@ async function fetchWordsForVerse(
   return Array.isArray(rows) ? rows : [];
 }
 
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+async function fetchDecoyMeals(
+  excludeSurah: number,
+  targetCount: number
+): Promise<string[]> {
+  const nums = shuffle(
+    surahs.filter(s => s.number !== excludeSurah).map(s => s.number)
+  ).slice(0, 14);
+
+  const meals: string[] = [];
+  for (const sn of nums) {
+    if (meals.length >= targetCount) break;
+    const url = `https://api.alquran.cloud/v1/surah/${sn}/tr.diyanet`;
+    const payload = await fetchJson<AlquranResponse>(url);
+    const ayahs = payload?.data?.ayahs;
+    if (!ayahs?.length) continue;
+    const pick = ayahs[Math.floor(Math.random() * ayahs.length)];
+    const text = pick?.text?.trim();
+    if (text && text.length > 12 && !meals.includes(text)) meals.push(text);
+  }
+  return meals;
+}
+
 export async function fetchLessonData(
   surahNumber: number
 ): Promise<LessonData | null> {
   const uthmaniUrl = `https://api.alquran.cloud/v1/surah/${surahNumber}/quran-uthmani`;
   const mealUrl = `https://api.alquran.cloud/v1/surah/${surahNumber}/tr.diyanet`;
 
-  const [arPayload, trPayload] = await Promise.all([
+  const [arPayload, trPayload, decoyMealsTr] = await Promise.all([
     fetchJson<AlquranResponse>(uthmaniUrl),
     fetchJson<AlquranResponse>(mealUrl),
+    fetchDecoyMeals(surahNumber, 14),
   ]);
 
   const arData = arPayload?.data;
@@ -83,6 +122,7 @@ export async function fetchLessonData(
     }
     ayahs.push({
       numberInSurah: ar.numberInSurah,
+      globalAyahNumber: ar.number,
       arabic: ar.text,
       mealTr: tr.text,
     });
@@ -103,5 +143,5 @@ export async function fetchLessonData(
 
   if (!ayahs.length) return null;
 
-  return { surahNumber, ayahs, words };
+  return { surahNumber, ayahs, words, decoyMealsTr };
 }

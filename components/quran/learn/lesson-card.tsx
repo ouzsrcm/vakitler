@@ -18,7 +18,7 @@ export default function LessonCard({
   locked: boolean;
   levelLocked: boolean;
 }) {
-  const { t, lang } = useTranslation("quran");
+  const { t, lang } = useTranslation("learn");
   const surah = surahs.find(s => s.number === lesson.surahNumber);
   const name =
     lang === "tr" ? surah?.nameTr ?? "" : surah?.nameEn ?? surah?.nameTr ?? "";
@@ -37,23 +37,23 @@ export default function LessonCard({
             <IconLock size={18} className="shrink-0 opacity-70" aria-hidden />
           </motion.span>
         ) : completed ? (
-          <div className="flex shrink-0 gap-0.5" aria-label={t("learnStarsEarned")}>
+          <div className="flex shrink-0 gap-0.5" aria-label={t("starsEarned")}>
             {[1, 2, 3].map(i => (
               <IconStarFilled
                 key={i}
                 size={14}
                 className={
                   i <= stars
-                    ? "text-amber-200 drop-shadow-sm"
-                    : "text-emerald-100/45 dark:text-emerald-900/30"
+                    ? "text-amber-400 drop-shadow-sm"
+                    : "text-white/35 dark:text-white/25"
                 }
               />
             ))}
           </div>
         ) : (
           <span
-            className="inline-flex h-7 w-7 shrink-0 rounded-full border-2 border-emerald-400 dark:border-emerald-500"
-            aria-label={t("learnNotStarted")}
+            className="inline-flex h-7 w-7 shrink-0 rounded-full border-2 border-violet-400 dark:border-violet-500"
+            aria-label={t("notStarted")}
           />
         )}
       </div>
@@ -61,8 +61,8 @@ export default function LessonCard({
         {surah?.name}
       </p>
       {!isLocked && completed && (
-        <span className="mt-2 text-[11px] font-medium text-emerald-50 dark:text-emerald-100">
-          {t("learnStarsCount", { count: stars })}
+        <span className="mt-2 text-[11px] font-medium text-white/90">
+          {t("starsCount", { count: stars })}
         </span>
       )}
     </>
@@ -71,13 +71,13 @@ export default function LessonCard({
   const cardClass = cx(
     "relative block rounded-2xl border p-3 text-left transition-colors min-h-[92px]",
     isLocked &&
-      "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500",
+      "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 opacity-60 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-400",
     !isLocked &&
       completed &&
-      "border-emerald-500 bg-emerald-500 text-white shadow-md dark:border-emerald-600 dark:bg-emerald-600",
+      "border-violet-500 bg-violet-500 text-white shadow-md dark:border-violet-600 dark:bg-violet-600",
     !isLocked &&
       !completed &&
-      "border-emerald-200 bg-white hover:border-emerald-400 dark:border-zinc-600 dark:bg-zinc-800 dark:hover:border-emerald-500"
+      "border-violet-200 bg-white hover:border-violet-400 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-violet-500"
   );
 
   if (isLocked) {
@@ -91,7 +91,10 @@ export default function LessonCard({
   return (
     <Link
       href={`/learn/${lesson.surahNumber}`}
-      className={cx(cardClass, "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500")}
+      className={cx(
+        cardClass,
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-500"
+      )}
     >
       {inner}
     </Link>

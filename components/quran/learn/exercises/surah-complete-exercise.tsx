@@ -1,7 +1,7 @@
 import type { Exercise } from "@/lib/learn/types";
 import { cx } from "@/utils/helper";
 
-export default function WordCardExercise({
+export default function SurahCompleteExercise({
   exercise,
   disabled,
   wrongPhase,
@@ -12,9 +12,9 @@ export default function WordCardExercise({
   disabled: boolean;
   wrongPhase: boolean;
   selected: string | null;
-  onSelect: (meaning: string) => void;
+  onSelect: (fragment: string) => void;
 }) {
-  const arabic = exercise.pairs?.[0]?.arabic ?? "";
+  const prefix = exercise.arabicPrefix ?? "";
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -23,11 +23,12 @@ export default function WordCardExercise({
       </p>
 
       <div
-        className="mx-auto rounded-2xl border border-violet-200 bg-violet-50/80 px-6 py-10 dark:border-zinc-600 dark:bg-zinc-800/80"
+        className="rounded-2xl border border-violet-100 bg-violet-50/80 px-3 py-4 dark:border-zinc-600 dark:bg-zinc-800/80"
         dir="rtl"
       >
-        <p className="text-center text-3xl font-semibold leading-relaxed text-zinc-900 dark:text-zinc-50">
-          {arabic}
+        <p className="text-center text-2xl font-semibold leading-relaxed text-zinc-900 dark:text-zinc-50">
+          {prefix}
+          <span className="mx-1 text-emerald-500">⋯</span>
         </p>
       </div>
 
@@ -40,8 +41,9 @@ export default function WordCardExercise({
               type="button"
               disabled={disabled}
               onClick={() => onSelect(opt)}
+              dir="rtl"
               className={cx(
-                "rounded-xl border px-3 py-3 text-left text-sm font-medium transition-colors disabled:opacity-60",
+                "rounded-xl border px-3 py-3 text-left text-lg leading-snug transition-colors disabled:opacity-60",
                 "border-violet-200 bg-white hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700",
                 isSel &&
                   wrongPhase &&

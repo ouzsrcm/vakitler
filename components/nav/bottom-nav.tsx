@@ -14,6 +14,10 @@ import { cx } from "@/utils/helper";
 export const BOTTOM_NAV_CONTENT_PADDING =
   "pb-[calc(4.5rem+env(safe-area-inset-bottom))]";
 
+/** Kaydırmalı sayfa gövdeleri için alt boşluk (nav + güvenli alan). */
+export const bottomNavScrollPaddingBottomClass =
+  "pb-[calc(5.75rem+env(safe-area-inset-bottom,0px))]";
+
 type Tab = {
   href: string;
   label: string;
@@ -56,6 +60,7 @@ export default function BottomNav() {
   }
 
   const onHome = router.pathname === "/";
+  const onLearn = router.pathname.startsWith("/learn");
 
   const barBg = onHome
     ? "border border-white/20 bg-white/20 shadow-sm backdrop-blur-md dark:border-white/15 dark:bg-white/10"
@@ -79,6 +84,7 @@ export default function BottomNav() {
         >
           {tabs.map(({ href, label, Icon, match }) => {
             const active = match(router.pathname);
+            const learnActive = active && onLearn;
             return (
               <Link
                 key={href}
@@ -87,9 +93,11 @@ export default function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={cx(
                   "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl py-1.5",
-                  active
-                    ? "font-semibold text-zinc-900 dark:text-zinc-100"
-                    : "text-zinc-500 dark:text-zinc-400"
+                  active && learnActive
+                    ? "font-semibold text-violet-700 dark:text-violet-300"
+                    : active
+                      ? "font-semibold text-zinc-900 dark:text-zinc-100"
+                      : "text-zinc-500 dark:text-zinc-400"
                 )}
               >
                 <span
@@ -98,7 +106,9 @@ export default function BottomNav() {
                     active &&
                       (onHome
                         ? "bg-white/40 ring-2 ring-white/50 dark:bg-white/15 dark:ring-white/20"
-                        : "bg-zinc-100 ring-2 ring-zinc-300/80 dark:bg-zinc-700/80 dark:ring-zinc-600")
+                        : learnActive
+                          ? "bg-violet-100 ring-2 ring-violet-500 dark:bg-violet-950/55 dark:ring-violet-500"
+                          : "bg-zinc-100 ring-2 ring-zinc-300/80 dark:bg-zinc-700/80 dark:ring-zinc-600")
                   )}
                 >
                   <Icon size={22} stroke={active ? 2 : 1.5} />

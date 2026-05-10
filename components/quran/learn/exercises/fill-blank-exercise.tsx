@@ -23,7 +23,7 @@ export default function FillBlankExercise({
       <p className="text-center text-sm font-semibold text-zinc-800 dark:text-zinc-100">
         {prompt}
       </p>
-      <p className="rounded-xl border border-emerald-100 bg-emerald-50/60 px-3 py-4 text-center text-sm leading-relaxed text-zinc-800 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-zinc-100">
+      <p className="rounded-xl border border-violet-100 bg-violet-50/70 px-3 py-4 text-center text-sm leading-relaxed text-zinc-800 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100">
         {masked}
       </p>
 
@@ -38,14 +38,14 @@ export default function FillBlankExercise({
               onClick={() => onSelect(opt)}
               className={cx(
                 "rounded-xl border px-3 py-3 text-left text-sm font-medium transition-colors disabled:opacity-60",
-                "border-emerald-100 bg-white hover:border-emerald-400 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:border-emerald-500",
+                "border-violet-200 bg-white hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700",
                 isSel &&
                   wrongPhase &&
-                  "border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-900/30",
+                  "border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-900",
                 isSel &&
                   !wrongPhase &&
                   disabled &&
-                  "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/30"
+                  "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900"
               )}
             >
               {opt}

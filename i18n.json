@@ -6,7 +6,7 @@
     "/settings/adjust": ["adjustments"],
     "/quran": ["quran"],
     "/quran/[surahId]": ["quran"],
-    "/learn": ["quran"],
-    "/learn/[surahId]": ["quran"]
+    "/learn": ["learn", "quran"],
+    "/learn/[surahId]": ["learn", "quran"]
   }
 }

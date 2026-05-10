@@ -65,10 +65,10 @@ export default function MatchExercise({
                     "border-emerald-500 bg-emerald-100 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-900/40 dark:text-emerald-100",
                   !done &&
                     active &&
-                    "border-emerald-500 bg-white dark:border-emerald-400 dark:bg-zinc-900",
+                    "border-violet-500 bg-violet-50 dark:border-violet-400 dark:bg-zinc-900",
                   !done &&
                     !active &&
-                    "border-emerald-100 bg-white hover:border-emerald-300 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:border-emerald-600"
+                    "border-violet-200 bg-white hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700"
                 )}
               >
                 {p.arabic}
@@ -93,7 +93,7 @@ export default function MatchExercise({
                   done &&
                     "border-emerald-500 bg-emerald-100 text-emerald-900 dark:border-emerald-500 dark:bg-emerald-900/40 dark:text-emerald-100",
                   !done &&
-                    "border-emerald-100 bg-white hover:border-emerald-300 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:border-emerald-600"
+                    "border-violet-200 bg-white hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700"
                 )}
               >
                 {t}

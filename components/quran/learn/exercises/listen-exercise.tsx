@@ -16,7 +16,7 @@ export default function ListenExercise({
   selected: string | null;
   onSelect: (label: string) => void;
 }) {
-  const { t } = useTranslation("quran");
+  const { t } = useTranslation("learn");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -43,9 +43,9 @@ export default function ListenExercise({
         onClick={() => {
           void audioRef.current?.play();
         }}
-        className="mx-auto rounded-full border border-emerald-300 bg-emerald-50 px-5 py-2 text-sm font-medium text-emerald-800 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200 dark:hover:bg-emerald-900/60"
+        className="mx-auto rounded-full border border-violet-300 bg-violet-50 px-5 py-2 text-sm font-medium text-violet-800 transition-colors hover:bg-violet-100 disabled:opacity-50 dark:border-violet-600 dark:bg-violet-950/50 dark:text-violet-200 dark:hover:bg-violet-900/60"
       >
-        {t("learnListenAgain")}
+        {t("listenAgain")}
       </button>
 
       <div className="mt-2 grid gap-2">
@@ -62,14 +62,14 @@ export default function ListenExercise({
               onClick={() => onSelect(opt)}
               className={cx(
                 "rounded-xl border px-3 py-3 text-left text-sm transition-colors disabled:opacity-60",
-                "border-emerald-100 bg-white hover:border-emerald-400 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:border-emerald-500",
+                "border-violet-200 bg-white hover:bg-violet-50 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-700",
                 isSel &&
                   wrongPhase &&
-                  "border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-900/30",
+                  "border-red-500 bg-red-50 dark:border-red-500 dark:bg-red-900",
                 isSel &&
                   !wrongPhase &&
                   disabled &&
-                  "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/30"
+                  "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900"
               )}
             >
               <span className="block font-medium text-zinc-800 dark:text-zinc-100">
