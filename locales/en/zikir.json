@@ -1,0 +1,22 @@
+{
+  "title": "Dhikr & Tasbih",
+  "subtitle": "Verily, in the remembrance of Allah do hearts find rest",
+  "subtitleSource": "Quran 13:28 (Ar-Ra'd)",
+  "categoryPrayer": "After Prayer",
+  "categoryDaily": "Daily",
+  "categorySufi": "Sufi / Spiritual",
+  "startButton": "Start",
+  "tapButton": "Tap",
+  "resetButton": "Reset",
+  "targetLabel": "Target",
+  "customTarget": "Custom",
+  "completed": "Completed",
+  "continueLabel": "Continue",
+  "nextDhikr": "Next dhikr",
+  "sourceLabel": "Source",
+  "virtueLabel": "Virtue",
+  "readWithTasbih": "Read with tasbih →",
+  "dailySuggestion": "Today's dhikr",
+  "noVibration": "Your device does not support vibration",
+  "tasavvufiNote": "These phrases are common in tariqa and heart-focused spiritual practice; this screen is for general guidance. Consult qualified scholars and your spiritual guide for practice and permission."
+}

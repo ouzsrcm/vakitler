@@ -11,6 +11,9 @@
     "/learn/words/practice": ["learn"],
     "/learn/elifba": ["learn"],
     "/learn/elifba/practice": ["learn"],
-    "/learn/elifba/[letter]": ["learn"]
+    "/learn/elifba/[letter]": ["learn"],
+    "/zikir": ["zikir"],
+    "/zikir/tesbih": ["zikir"],
+    "/zikir/[id]": ["zikir"]
   }
 }

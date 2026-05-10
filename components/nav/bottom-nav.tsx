@@ -9,6 +9,7 @@ import {
   IconSettings,
   type TablerIconsProps,
 } from "@tabler/icons-react";
+import TasbihNavIcon from "@/components/zikir/tasbih-nav-icon";
 import { cx } from "@/utils/helper";
 
 export const BOTTOM_NAV_CONTENT_PADDING =
@@ -21,7 +22,7 @@ export const bottomNavScrollPaddingBottomClass =
 type Tab = {
   href: string;
   label: string;
-  Icon: ComponentType<TablerIconsProps>;
+  Icon: ComponentType<TablerIconsProps | { size?: number; stroke?: number }>;
   match: (pathname: string) => boolean;
 };
 
@@ -45,6 +46,12 @@ const tabs: Tab[] = [
     match: p => p === "/learn" || p.startsWith("/learn/"),
   },
   {
+    href: "/zikir",
+    label: "Zikir",
+    Icon: TasbihNavIcon as ComponentType<TablerIconsProps>,
+    match: p => p === "/zikir" || p.startsWith("/zikir/"),
+  },
+  {
     href: "/settings",
     label: "Ayarlar",
     Icon: IconSettings,
@@ -61,6 +68,7 @@ export default function BottomNav() {
 
   const onHome = router.pathname === "/";
   const onLearn = router.pathname.startsWith("/learn");
+  const onZikir = router.pathname.startsWith("/zikir");
 
   const barBg = onHome
     ? "border border-white/20 bg-white/20 shadow-sm backdrop-blur-md dark:border-white/15 dark:bg-white/10"
@@ -85,6 +93,7 @@ export default function BottomNav() {
           {tabs.map(({ href, label, Icon, match }) => {
             const active = match(router.pathname);
             const learnActive = active && onLearn;
+            const zikirActive = active && onZikir;
             return (
               <Link
                 key={href}
@@ -95,9 +104,11 @@ export default function BottomNav() {
                   "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl py-1.5",
                   active && learnActive
                     ? "font-semibold text-violet-700 dark:text-violet-300"
-                    : active
-                      ? "font-semibold text-zinc-900 dark:text-zinc-100"
-                      : "text-zinc-500 dark:text-zinc-400"
+                    : active && zikirActive
+                      ? "font-semibold text-amber-600 dark:text-amber-400"
+                      : active
+                        ? "font-semibold text-zinc-900 dark:text-zinc-100"
+                        : "text-zinc-500 dark:text-zinc-400"
                 )}
               >
                 <span
@@ -108,7 +119,9 @@ export default function BottomNav() {
                         ? "bg-white/40 ring-2 ring-white/50 dark:bg-white/15 dark:ring-white/20"
                         : learnActive
                           ? "bg-violet-100 ring-2 ring-violet-500 dark:bg-violet-950/55 dark:ring-violet-500"
-                          : "bg-zinc-100 ring-2 ring-zinc-300/80 dark:bg-zinc-700/80 dark:ring-zinc-600")
+                          : zikirActive
+                            ? "bg-amber-100 ring-2 ring-amber-500 dark:bg-amber-950/50 dark:ring-amber-500"
+                            : "bg-zinc-100 ring-2 ring-zinc-300/80 dark:bg-zinc-700/80 dark:ring-zinc-600")
                   )}
                 >
                   <Icon size={22} stroke={active ? 2 : 1.5} />
