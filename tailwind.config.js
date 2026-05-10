@@ -9,6 +9,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        arabic: [
+          "Amiri",
+          '"Amiri Quran"',
+          '"Scheherazade New"',
+          '"Traditional Arabic"',
+          "serif",
+        ],
+      },
       colors: {
         [TimeNames.Imsak]: {
           light: "#daf2fe",

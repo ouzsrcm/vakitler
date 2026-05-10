@@ -3,6 +3,8 @@
   "defaultLocale": "tr",
   "pages": {
     "*": ["common", "settings"],
-    "/settings/adjust": ["adjustments"]
+    "/settings/adjust": ["adjustments"],
+    "/quran": ["quran"],
+    "/quran/[surahId]": ["quran"]
   }
 }
